@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Idrissa ABBA ">
+    <title>J'y serai au Malan </title>
+    <link rel="shortcut icon" href="./assets/icon.jpeg" type="image/x-icon">
+    <link rel="canonical" href=https://dev-week.netlify.app>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/css/intlTelInput.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BVDNWW1LC0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-BVDNWW1LC0');
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/intlTelInput.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <style>
+        .dropzone {
+            border: 2px dashed #b8b8b9;
+            transition: all 0.3s ease;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #f05122, #00ca43);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .dropzone:hover {
+            border-color: #6B7280;
+            background-color: #F9FAFB;
+        }
+
+        .dropzone.dragover {
+            border-color: #3B82F6;
+            background-color: #EFF6FF;
+        }
+
+        #flyer-container {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        #flyer-canvas {
+            touch-action: none;
+            /* Empêche le zoom tactile sur mobile */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans">
+<!-- Navigation -->
+<nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <a href="#" class="flex items-center">
+                    <i class="fas fa-book text-amber-600 text-2xl mr-2"></i>
+                    <span class="text-xl font-bold gradient-text">MALAN </span>
+                </a>
+            </div>
+            <!----
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="./index.html" class="text-gray-700 hover:text-indigo-600 animated-underline nav-link" data-section="home">Accueil</a>
+        
+            </div>
+            <div class="flex items-center">
+                <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition duration-300 ease-in-out">
+                 <a href="https://forms.gle/BZktFZZ1Z8Sy428H7">S'incrire</a>
+                </button>
+                <button id="mobile-menu-button" class="md:hidden text-gray-500 ml-4">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+            --->
+        </div>
+    </div>
+    <!-- Menu mobile -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="./index.html" class="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md nav-link" data-section="home">Accueil</a>
+
+       <ul> <li>    </li> </ul> 
+        </div>
+    </div>
+</nav>
+<div class="bg-gradient-to-br from-indigo-50 to-blue-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mt-10 mb-12">
+            <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl sm:tracking-tight lg:text-4xl gradient-text ">
+                 <span class=" gradient-text">Malan</span> 4e EDITION
+            </h1>
+            <h3 class="my-4">
+                Le Marché du Livre et des Arts du Niger - 4e édition 
+                <br>
+                Concours Talents Littéraires - 5e édition
+            </h3>
+            <p class="mt-5 max-w-xl mx-auto text-xl text-gray-500">
+                Generer votre flyer de participation
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Canvas Container -->
+            <div class="flex-1">
+                <div id="flyer-container"
+                    class="bg-white rounded-xl overflow-hidden shadow-xl relative w-full aspect-square">
+                    <canvas id="flyer-canvas" class="absolute top-0 left-0 w-full h-full"></canvas>
+                    <div id="canvas-overlay" class="absolute inset-0 pointer-events-none"></div>
+                </div>
+                <div id="download-btn-container" class="mt-6 hidden">
+                    <button id="download-btn"
+                        class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300">
+                        Téléchargez
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Container -->
+            <div class="flex-1">
+                <div class="bg-white rounded-xl shadow-xl p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Mise en page</h2>
+
+                    <div class="space-y-6">
+                        <!-- Upload Section -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Votre photo</label>
+                            <div id="dropzone" class="dropzone rounded-lg p-8 text-center cursor-pointer">
+                                <div class="space-y-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <p class="text-sm text-gray-600">
+                                        <span class="font-medium text-indigo-600">Cliquez pour upload</span> ou
+                                        glissez-déposez
+                                    </p>
+                                    <p class="text-xs text-gray-500">PNG - JPEG</p>
+                                </div>
+                                <input id="file-upload" type="file" accept="image/*" class="hidden">
+                            </div>
+                        </div>
+
+                        <!-- Position Controls -->
+                        <div id="position-controls" class="hidden space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Position</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button id="move-left" class="bg-gray-100 hover:bg-gray-200 p-2 rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 19l-7-7 7-7" />
+                                        </svg>
+                                    </button>
+                                    <button id="move-up" class="bg-gray-100 hover:bg-gray-200 p-2 rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 15l7-7 7 7" />
+                                        </svg>
+                                    </button>
+                                    <button id="move-right" class="bg-gray-100 hover:bg-gray-200 p-2 rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </button>
+                                    <button id="move-down"
+                                        class="bg-gray-100 hover:bg-gray-200 p-2 rounded col-start-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="zoom"
+                                    class="block text-sm font-medium text-gray-700 mb-2">Zoom</label>
+                                <input type="range" id="zoom" min="10" max="300" value="100"
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <footer class="bg-gray-900 text-gray-300 py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="">
+                <!---
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-4">DevWeek</h3>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Connecter les passionnés, professionnels et apprenants de la tech pour partager et collaborer.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://github.com/tccepiniger" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/company/tccepiniger" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://www.facebook.com/profile.php?id=61572467386089" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-4">Communauté</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://www.tcc.hyver.org/" class="text-gray-400 hover:text-white text-sm">TCClubs</a></li>
+                        <li><a href="https://www.tcc.hyver.org/c/ecole-privee-dingenierie-du-niger-epi-niger" class="text-gray-400 hover:text-white text-sm">TCC-EPI</a></li>
+                        <li><a href="https://www.tcc.hyver.org/c/african-developpement-university-adu" class="text-gray-400 hover:text-white text-sm">TCC-ADU</a></li>
+                        <li><a href="https://www.tcc.hyver.org/c/ecole-superieure-des-communications-electroniques-et-de-la-poste-escep" class="text-gray-400 hover:text-white text-sm">TCC-ESCEP</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-4">Liens rapides</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" id="about" class="text-gray-400 hover:text-white text-sm" >À propos</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm " id="contact">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm " id="about">About</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm " id="schedule">Programme</a></li>
+                        
+                    </ul>
+                </div>
+            </div> --->
+            <div class="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm text-center">
+                    &copy; Malan -  Made with ❤️ by Abbuss
+                </p>
+                <div class="mt-4 md:mt-0">
+                    <a href="mailto:idrissabba14@gmail.com" class="text-gray-400 hover:text-white text-sm">Contactez-nous</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const EXPORT_SIZE = 1080; // Taille d'export fixe
+            const container = document.getElementById('flyer-container');
+            const canvasEl = document.getElementById('flyer-canvas');
+            let canvasWidth = container.offsetWidth;
+
+            // Initialiser le canvas avec la taille d'affichage
+            const canvas = new fabric.Canvas('flyer-canvas', {
+                selection: false,
+                backgroundColor: '#fff',
+                width: canvasWidth,
+                height: canvasWidth,
+                preserveObjectStacking: true
+            });
+
+            // Variables
+            let baseImage = null; // L'flyer (premier plan)
+            let backgroundImage = null; // L'image uploadée (arrière-plan)
+            const dropzone = document.getElementById('dropzone');
+            const fileInput = document.getElementById('file-upload');
+            const positionControls = document.getElementById('position-controls');
+            const downloadBtnContainer = document.getElementById('download-btn-container');
+
+            // Load base image (flyer)
+            const baseImageUrl = './malan.png';
+            fabric.Image.fromURL(baseImageUrl, function(img) {
+                const scale = canvasWidth / img.width;
+                img.set({
+                    scaleX: scale,
+                    scaleY: scale,
+                    left: 0,
+                    top: 0,
+                    selectable: false,
+                    evented: false,
+                    lockMovementX: true,
+                    lockMovementY: true,
+                    hasControls: false,
+                    hasBorders: false
+                });
+                canvas.add(img);
+                baseImage = img;
+                canvas.renderAll();
+            });
+
+            // Make canvas responsive
+            function resizeCanvas() {
+                canvasWidth = container.offsetWidth;
+                canvas.setWidth(canvasWidth);
+                canvas.setHeight(canvasWidth);
+
+                // Resize images if they exist
+                if (baseImage) {
+                    const scale = canvasWidth / (baseImage.width * baseImage.scaleX);
+                    baseImage.scale(scale);
+                    baseImage.setCoords();
+                }
+
+                if (backgroundImage) {
+                    const scale = (canvasWidth / (backgroundImage.width * backgroundImage.scaleX)) * (
+                        backgroundImage.scaleX);
+                    backgroundImage.scale(scale);
+                    backgroundImage.setCoords();
+                }
+
+                canvas.renderAll();
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+
+            // Event Listeners
+            dropzone.addEventListener('click', () => fileInput.click());
+
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('dragover');
+            });
+
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('dragover');
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('dragover');
+
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleImageUpload(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleImageUpload(e.target.files[0]);
+                }
+            });
+
+            // Movement controls
+            document.getElementById('move-left').addEventListener('click', () => moveImage(-20, 0));
+            document.getElementById('move-right').addEventListener('click', () => moveImage(20, 0));
+            document.getElementById('move-up').addEventListener('click', () => moveImage(0, -20));
+            document.getElementById('move-down').addEventListener('click', () => moveImage(0, 20));
+
+            document.getElementById('zoom').addEventListener('input', (e) => {
+                if (backgroundImage) {
+                    const scale = e.target.value / 100;
+                    backgroundImage.scale(scale);
+                    canvas.renderAll();
+                }
+            });
+/*
+            document.getElementById('rotation').addEventListener('input', (e) => {
+                if (backgroundImage) {
+                    backgroundImage.set('angle', parseInt(e.target.value));
+                    canvas.renderAll();
+                }
+            });
+
+            document.getElementById('opacity').addEventListener('input', (e) => {
+                if (backgroundImage) {
+                    backgroundImage.set('opacity', parseInt(e.target.value) / 100);
+                    canvas.renderAll();
+                }
+            });
+*/
+            // Download button
+            document.getElementById('download-btn').addEventListener('click', downloadCanvas);
+
+            // Functions
+            function handleImageUpload(file) {
+                if (!file.type.match('image.*')) {
+                    alert('Veuillez sélectionner une image valide');
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    fabric.Image.fromURL(e.target.result, function(img) {
+                        // Remove previous background if exists
+                        if (backgroundImage) {
+                            canvas.remove(backgroundImage);
+                        }
+
+                        // Calculate scale to fit width
+                        const initialScale = canvasWidth / img.width;
+
+                        img.set({
+                            left: canvasWidth / 2,
+                            top: canvasWidth / 2,
+                            originX: 'center',
+                            originY: 'center',
+                            scaleX: initialScale,
+                            scaleY: initialScale,
+                            selectable: false,
+                            evented: true, // Permet de déplacer l'image
+                            hasControls: false,
+                            hasBorders: false,
+                            lockRotation: false,
+                            lockScalingX: false,
+                            lockScalingY: false,
+                            lockMovementX: false,
+                            lockMovementY: false,
+                            opacity: 1
+                        });
+
+                        canvas.add(img);
+                        backgroundImage = img;
+
+                        // S'assurer que l'flyer reste au premier plan
+                        if (baseImage) {
+                            canvas.bringToFront(baseImage);
+                        }
+
+                        // Activer le déplacement par glisser-déposer
+                        img.on('mousedown', function() {
+                            canvas.setActiveObject(img);
+                        });
+
+                        img.on('moved', function() {
+                            canvas.renderAll();
+                        });
+
+                        // Show controls and download button
+                        positionControls.classList.remove('hidden');
+                        downloadBtnContainer.classList.remove('hidden');
+
+                        // Update sliders
+                        document.getElementById('zoom').value = 100;
+                 
+
+                        canvas.renderAll();
+                    });
+                };
+
+                reader.readAsDataURL(file);
+
+                // Update dropzone appearance
+                dropzone.innerHTML = `
+                    <div class="flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-sm font-medium text-gray-700">${file.name}</span>
+                    </div>
+                `;
+            }
+
+            function moveImage(deltaX, deltaY) {
+                if (backgroundImage) {
+                    backgroundImage.set({
+                        left: backgroundImage.left + deltaX,
+                        top: backgroundImage.top + deltaY
+                    });
+                    canvas.renderAll();
+                }
+            }
+
+            function downloadCanvas() {
+                // Sauvegarder l'état actuel du canvas
+                const currentWidth = canvas.getWidth();
+                const currentHeight = canvas.getHeight();
+                const objects = canvas.getObjects();
+
+                // Redimensionner temporairement le canvas à 1080x1080
+                canvas.setWidth(EXPORT_SIZE);
+                canvas.setHeight(EXPORT_SIZE);
+
+                // Mettre à l'échelle tous les objets pour la haute résolution
+                const scale = EXPORT_SIZE / currentWidth;
+                objects.forEach(obj => {
+                    const originalScaleX = obj.scaleX;
+                    const originalScaleY = obj.scaleY;
+                    const originalLeft = obj.left;
+                    const originalTop = obj.top;
+
+                    obj.scaleX = originalScaleX * scale;
+                    obj.scaleY = originalScaleY * scale;
+                    obj.left = originalLeft * scale;
+                    obj.top = originalTop * scale;
+                    obj.setCoords();
+                });
+
+                // Rendre le canvas
+                canvas.renderAll();
+
+                // Créer le lien de téléchargement
+                const link = document.createElement('a');
+                link.download = 'malan.jpg';
+                link.href = canvas.toDataURL({
+                    format: 'jpeg',
+                    quality: 1.0,
+                    multiplier: 1
+                });
+
+                // Restaurer la taille et l'échelle originales
+                canvas.setWidth(currentWidth);
+                canvas.setHeight(currentHeight);
+
+                objects.forEach(obj => {
+                    const originalScaleX = obj.scaleX / scale;
+                    const originalScaleY = obj.scaleY / scale;
+                    const originalLeft = obj.left / scale;
+                    const originalTop = obj.top / scale;
+
+                    obj.scaleX = originalScaleX;
+                    obj.scaleY = originalScaleY;
+                    obj.left = originalLeft;
+                    obj.top = originalTop;
+                    obj.setCoords();
+                });
+
+                canvas.renderAll();
+
+                // Déclencher le téléchargement
+                link.click();
+            }
+        });
+    </script>
+        <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MJ47NXBX"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+</body>
+</html>
